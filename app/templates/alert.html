@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}IndexA{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #335399; }
+    </style>
+{% endblock %}
+{% block content %}
+{% autoescape false %}
+    <p style="color:#335399">
+      Alert message!!
+    </p>
+    <table border="1">
+        <tr>
+            <td>Status</td>
+            <td>Alert Name</td>
+            <td>Annotation</td>
+            <td>Instance</td>
+            <td>Value</td>
+            <td>Starts At</td>
+            <td>Ends At</td>
+        </tr>
+        {% for index, item in alerts if index=='alerts' %}
+        {%- for alert in item -%}
+        {%- if alert['status']=='firing' -%}
+        <tr>
+            <td>{{ alert.status }}</td>
+            <td>{{ alert.labels['alertname'] }}</td>
+            <td>{{ alert.annotations['description'] }}</td>
+            <td>{{ alert.labels['instance'] }}</td>
+            <td>{{ alert.annotations['value'] }}</td>
+            <td>{{ alert.startsAt.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>-</td>
+        </tr>
+        {%- else -%}
+        <tr>
+            <td>{{ alert.status }}</td>
+            <td>{{ alert.labels['alertname'] }}</td>
+            <td>{{ alert.annotations['description'] }}</td>
+            <td>{{ alert.labels['instance'] }}</td>
+            <td>{{ alert.annotations['value'] }}</td>
+            <td>{{ alert.startsAt.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>{{ alert.endsAt.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+        </tr>
+        {%- endif -%}
+        {%- endfor -%}
+        {%- endfor -%}
+      </table>
+{% endautoescape %}
+{% endblock %}

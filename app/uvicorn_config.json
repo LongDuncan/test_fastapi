@@ -1,0 +1,62 @@
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "formatters": {
+      "default": {
+        "()": "uvicorn.logging.DefaultFormatter",
+        "fmt": "%(asctime)s - [%(levelname)s] - %(funcName)s %(message)s",
+        "use_colors": true
+      },
+      "access": {
+        "()": "uvicorn.logging.AccessFormatter",
+        "fmt": "%(asctime)s - [%(levelname)s] - %(funcName)s %(message)s",
+        "use_colors": true
+      }
+    },
+    "handlers": {
+      "default_console": {
+        "formatter": "default",
+        "class": "logging.StreamHandler",
+        "stream": "ext://sys.stderr"
+      },
+      "access_console": {
+        "formatter": "access",
+        "class": "logging.StreamHandler",
+        "stream": "ext://sys.stdout"
+      },
+      "default_filerotate": {
+        "formatter": "default",
+        "class": "logging.handlers.RotatingFileHandler",
+        "filename": "api.log",
+        "mode": "a", 
+        "maxBytes": 10485760,
+        "backupCount": 3,
+        "encoding":"utf-8"
+      },
+      "access_filerotate": {
+        "formatter": "access",
+        "class": "logging.handlers.RotatingFileHandler",
+        "filename": "api.log",
+        "mode": "a", 
+        "maxBytes": 10485760,
+        "backupCount": 3,
+        "encoding":"utf-8"
+      }
+    },
+    "loggers": {
+      "uvicorn": {
+        "handlers": [
+          "default_filerotate", "default_console"
+        ],
+        "level": "DEBUG",
+        "propagate": false
+      },
+      "uvicorn.access": {
+        "handlers": [
+          "access_console", "default_filerotate"
+        ],
+        "level": "DEBUG",
+        "propagate": false
+      }
+    }
+  }
